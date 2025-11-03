@@ -46,8 +46,8 @@ Before you begin, ensure you have the following installed:
 1.  **Clone the repository:**
 
     ```bash
-    git clone <repository_url>
-    cd <repository_directory>
+    git clone https://github.com/Krushnansh22/Swasthify
+    cd Swasthify
     ```
 
 2.  **Set up the backend:**
@@ -56,7 +56,7 @@ Before you begin, ensure you have the following installed:
     cd backend
     python3 -m venv venv
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-    pip install -r requirements.txt
+    pip install -r backend/requirements.txt
     ```
 
 3.  **Configure the database:**
@@ -116,9 +116,6 @@ Swasthify/
 └── ...
 ```
 
-## 📸 Screenshots
-
-(Add screenshots of the admin portal, patient portal, and other relevant parts of the application here)
 
 ## 🤝 Contributing
 
@@ -135,10 +132,9 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 📬 Contact
 
-For questions or issues, please contact: [Your Name/Organization] - [Your Email]
+For questions or issues, please contact: krushnansh22@gmail.com
 
 ## 💖 Thanks
 
 Thank you for using Swasthify! We hope this platform helps you streamline your health insurance management processes.
 
-This is written by [readme.ai](https://readme-generator-phi.vercel.app/).
