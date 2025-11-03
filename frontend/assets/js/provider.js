@@ -1,12 +1,21 @@
 // File: Swasthify/frontend/assets/js/provider.js
 
+const providerUser = JSON.parse(sessionStorage.getItem('swasthify_user'));
+
+if (!providerUser) {
+    window.location.href = 'login.html';
+} else if (providerUser.role !== 'provider') {
+    alert('Access Denied: You must be a provider to view this page.');
+    window.location.href = 'login.html';
+}
+
 const API_URL = 'http://127.0.0.1:5000/api';
 
 // This would be set after the provider logs in
 const MY_PROVIDER_ID = 1; // Hard-coded for testing
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Provider Portal Loaded");
+    console.log(`Provider Portal Loaded for ${providerUser.name} (ID: ${providerUser.id})`);
     
     const claimForm = document.getElementById('submit-claim-form');
     claimForm.addEventListener('submit', handleSubmitClaim);

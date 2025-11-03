@@ -1,9 +1,22 @@
 // File: Swasthify/frontend/assets/js/admin.js
 
+// Get user data from session storage
+const adminUser = JSON.parse(sessionStorage.getItem('swasthify_user'));
+
+if (!adminUser) {
+    // If no user, redirect to login
+    window.location.href = 'login.html';
+} else if (adminUser.role !== 'admin') {
+    // If user is not an admin, show error and redirect
+    alert('Access Denied: You must be an admin to view this page.');
+    window.location.href = 'login.html';
+}
+
 // Define the base URL of your API
 const API_URL = 'http://127.0.0.1:5000/api';
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log(`Welcome, ${adminUser.name}!`);
     const loadMembersBtn = document.getElementById('load-members-btn');
     const addMemberForm = document.getElementById('add-member-form');
     const formMessage = document.getElementById('form-message');
