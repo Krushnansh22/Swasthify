@@ -1,0 +1,44 @@
+# --- Python (Backend) ---
+
+# Ignore the virtual environment folder
+backend/venv/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore database files (if you use SQLite for testing)
+*.sqlite3
+*.db
+
+
+# --- Environment Variables ---
+
+# Ignore environment files.
+# You should move your database credentials from db.py
+# to a .env file and load them in your app.
+.env
+
+
+# --- OS & IDE Specific ---
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+
+# --- Node.js (if you ever add a frontend build step) ---
+node_modules/
+npm-debug.log
+package-lock.json
