@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Health Insurance Management</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #666;
+            font-size: 14px;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        .tab:hover {
+            color: #667eea;
+        }
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .alert {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .alert-error {
+            background: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+        .alert-success {
+            background: #efe;
+            color: #3c3;
+            border: 1px solid #cfc;
+        }
+        .demo-credentials {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .demo-credentials h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .demo-credentials p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .demo-credentials strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>🏥 HealthCare+</h1>
+            <p>Health Insurance Management System</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('admin')">Admin</button>
+            <button class="tab" onclick="switchTab('provider')">Provider</button>
+            <button class="tab" onclick="switchTab('patient')">Patient</button>
+        </div>
+
+        <div id="alertBox"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Email / Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
+        <div class="demo-credentials">
+            <h4>Demo Credentials:</h4>
+            <div id="demoCredentials"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let currentUserType = 'admin';
+
+        const demoAccounts = {
+            admin: {
+                username: 'admin@insurance.com',
+                password: 'admin123',
+                description: 'Full system access'
+            },
+            provider: {
+                username: 'admin@citygeneral.com',
+                password: 'provider123',
+                description: 'City General Hospital'
+            },
+            patient: {
+                username: 'john.doe@email.com',
+                password: 'password123',
+                description: 'John Doe - PolicyHolder'
+            }
+        };
+
+        // Check if already logged in
+        if (localStorage.getItem('token')) {
+            const userType = localStorage.getItem('user_type');
+            if (userType === 'Admin') window.location.href = 'admin.html';
+            else if (userType === 'Provider') window.location.href = 'provider.html';
+            else if (userType === 'Patient') window.location.href = 'patient.html';
+        }
+
+        function switchTab(userType) {
+            currentUserType = userType;
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update demo credentials
+            updateDemoCredentials();
+        }
+
+        function updateDemoCredentials() {
+            const demo = demoAccounts[currentUserType];
+            document.getElementById('demoCredentials').innerHTML = `
+                <p><strong>Username:</strong> ${demo.username}</p>
+                <p><strong>Password:</strong> ${demo.password}</p>
+                <p style="margin-top: 8px; font-style: italic;">${demo.description}</p>
+            `;
+        }
+
+        // Initialize with admin credentials
+        updateDemoCredentials();
+
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch(API_URL + '/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_type: currentUserType,
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.token) {
+                    // Store authentication info
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user_type', data.user_type);
+                    localStorage.setItem('user_id', data.user_id);
+                    
+                    // Show success message
+                    showAlert('Login successful! Redirecting...', 'success');
+                    
+                    // Redirect based on user type
+                    setTimeout(() => {
+                        if (data.user_type === 'Admin') {
+                            window.location.href = 'admin.html';
+                        } else if (data.user_type === 'Provider') {
+                            window.location.href = 'provider.html';
+                        } else if (data.user_type === 'Patient') {
+                            window.location.href = 'patient.html';
+                        }
+                    }, 1000);
+                } else {
+                    showAlert(data.message || 'Invalid credentials', 'error');
+                }
+            } catch (error) {
+                showAlert('Connection error. Please make sure the server is running.', 'error');
+            }
+        };
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            
+            if (type === 'error') {
+                setTimeout(() => {
+                    alertBox.innerHTML = '';
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
