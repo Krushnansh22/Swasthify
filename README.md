@@ -1,4 +1,7 @@
 # Swasthify: Health Insurance Management Platform 🏥
+HEllo changes
+
+
 
 Swasthify is a comprehensive health insurance management platform designed to streamline policyholder management and provide a user-friendly interface for both administrators and patients. It offers a backend API built with Flask for managing policyholder data, and a frontend with admin and patient portals for interacting with the system. The platform aims to simplify health insurance processes, making them more accessible and efficient.
 
